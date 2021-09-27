@@ -1,10 +1,8 @@
 #!/bin/bash
 
 function createuser {
-	mkdir ./users/pedro
-    cd ./users/pedro
-	touch pass.txt 
-	cat $2 > pass.txt
+	mkdir ./users/$1 
+	echo $2 | cat > ./users/$1/pass.txt
 }
 
 mkdir users
@@ -13,5 +11,7 @@ while [ 1 ]; do
 		read -a COMM
 		if [ ${COMM[0]} = "quit" ]; then
 			exit
+		elif [ ${COMM[0]} = "creatuser" ]; then
+			createuser ${COMM[1]} ${COMM[2]}
 		fi
 done
