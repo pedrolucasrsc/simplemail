@@ -1,8 +1,12 @@
 #!/bin/bash
 
 function createuser {
-	mkdir ./users/$1 
-	echo $2 | cat > ./users/$1/pass.txt
+	if [ -d ./users/$1 ]; then
+		echo "Error: This user already exists"
+	else
+		mkdir ./users/$1 
+		echo $2 | cat > ./users/$1/pass.txt
+	fi
 }
 
 mkdir users
