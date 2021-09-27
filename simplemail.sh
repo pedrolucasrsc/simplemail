@@ -1,13 +1,17 @@
 #!/bin/bash
-#function createuser{
-#	mkdir ./users/$1
-#	touch pass.txt 
-#	cat $2 > pass.txt
-#}
+
+function createuser {
+	mkdir ./users/pedro
+    cd ./users/pedro
+	touch pass.txt 
+	cat $2 > pass.txt
+}
+
+mkdir users
 while [ 1 ]; do
 		echo -n simplemail\>\ 
-		read COMM
-		if [ $COMM = "quit" ]; then
+		read -a COMM
+		if [ ${COMM[0]} = "quit" ]; then
 			exit
 		fi
 done
