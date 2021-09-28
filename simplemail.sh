@@ -1,17 +1,17 @@
 #!/bin/bash
 
 function createuser {
-	if [ -d ./users/$1 ]; then
+	if [ -d ./simplemail/users/$1 ]; then
 		echo "Error: This user already exists"
 	else
-		mkdir ./users/$1 
-		echo $2 | cat > ./users/$1/pass.txt
+		mkdir ./simplemail/users/$1 
+		echo $2 | cat > ./simplemail/users/$1/pass.txt
 	fi
 }
 
 function login {
-	if [ -d ./users/$1 ]; then
-		if [ "$2" = "$(cat ./users/$1/pass.txt)" ] ; then
+	if [ -d ./simplemail/users/$1 ]; then
+		if [ "$2" = "$(cat ./simplemail/users/$1/pass.txt)" ] ; then
 			LOGIN=$1
 			echo $LOGIN
 		else
@@ -23,12 +23,12 @@ function login {
 }
 
 mkdir users
-while [ 1 ]; do
+while [ true ]; do
 		echo -n simplemail\>\ 
 		read -a COMM
 		if [ ${COMM[0]} = "quit" ]; then
 			exit
-		elif [ ${COMM[0]} = "creatuser" ]; then
+		elif [ ${COMM[0]} = "createuser" ]; then
 			createuser ${COMM[1]} ${COMM[2]}
 		elif [ ${COMM[0]} = "login" ]; then
 			login ${COMM[1]} ${COMM[2]}
