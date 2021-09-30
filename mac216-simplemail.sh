@@ -49,6 +49,19 @@ function msg {
 	fi
 }
 
+function list {
+    if [ ! "$LOGIN" = " " ]; then
+        CONTADOR=0
+        cd ./simplemail/users/$LOGIN/msg/
+        for msg in *; do
+            CONTADOR=$[$CONTADOR + 1]
+            echo " $CONTADOR $msg"
+        done
+    else
+        echo "Please log into your account"
+    fi
+}
+
 if [ ! -d ./simplemail ]; then
     mkdir ./simplemail
 fi
@@ -75,5 +88,7 @@ while [ true ]; do
 			listuser
 		elif [ ${COMM[0]} = "msg" ]; then
 			msg ${COMM[1]}
+        elif [ ${COMM[0]} = "list" ]; then
+            list
 		fi
 done
