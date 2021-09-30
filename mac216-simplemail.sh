@@ -41,7 +41,8 @@ function msg {
 		if [ -d ./simplemail/users/$1 ];then
 		    echo "What's yout message?'CTRL-D' to stop"
 			cat > ./simplemail/users/$1//msg/"| N | $( date ) | $LOGIN"
-		else 
+			echo 
+		else
 			echo "This user doesn't exist"
 		fi
 	else
@@ -57,9 +58,30 @@ function list {
             CONTADOR=$[$CONTADOR + 1]
             echo " $CONTADOR $msg"
         done
+		cd ..;cd ..;cd ..;cd ..
     else
         echo "Please log into your account"
     fi
+}
+
+function read1 {
+	if [ ! "$LOGIN" = " " ]; then
+        CONTADOR=0
+        cd ./simplemail/users/$LOGIN/msg/
+        for msg in *; do
+			CONTADOR=$[$CONTADOR + 1]
+			if [ $CONTADOR = $1 ];then
+				echo -n From: 
+				echo "$msg" | cut -c 37-80
+				cat "$msg"
+				echo 
+				break
+			fi
+        done
+    else
+        echo "Please log into your account"
+    fi
+
 }
 
 if [ ! -d ./simplemail ]; then
@@ -90,5 +112,7 @@ while [ true ]; do
 			msg ${COMM[1]}
         elif [ ${COMM[0]} = "list" ]; then
             list
+		elif [ ${COMM[0]} = "read" ]; then
+			read1 ${COMM[1]}
 		fi
 done
