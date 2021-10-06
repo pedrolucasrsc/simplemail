@@ -72,12 +72,16 @@ function read1 {
 			CONTADOR=$[$CONTADOR + 1]
 			if [ $CONTADOR = $1 ];then
 				echo -n From: 
-				echo "$msg" | cut -c 37-80
+				echo "$msg" | cut -d'|' -f4
 				cat "$msg"
-				echo 
+				echo
+				TARGET=$(echo $msg | sed 's/| N |/|   |/')
+				echo "$TARGET"
+				mv "$msg" "$TARGET" 
 				break
 			fi
         done
+		cd ..;cd ..;cd ..;cd ..
     else
         echo "Please log into your account"
     fi
