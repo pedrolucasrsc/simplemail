@@ -23,7 +23,9 @@ function login {
 }
 
 function passwd {
-    if [ -d ./simplemail/users/$1 -a "$2" = "$(cat ./simplemail/users/$1/pass.txt)" ]; then
+    if [ ! -d ./simplemail/users/$1 ]; then
+        echo "Error: This user doesn't exist"
+    elif [ -d ./simplemail/users/$1 -a "$2" = "$(cat ./simplemail/users/$1/pass.txt)" ]; then
     	echo $3 | cat > ./simplemail/users/$1/pass.txt
     else
     	echo "Error: Username or Password incorrect"
@@ -40,7 +42,7 @@ function msg {
 	if [ ! "$LOGIN" = " " ];then
 		if [ -d ./simplemail/users/$1 ];then
 		    echo "What's yout message?'CTRL-D' to stop"
-			cat > ./simplemail/users/$1//msg/"| N | $( date ) | $LOGIN"
+			cat > ./simplemail/users/$1//msg/"|N| $( date ) | $LOGIN"
 			echo 
 		else
 			echo "This user doesn't exist"
@@ -75,9 +77,9 @@ function read1 {
 				echo "$msg" | cut -d'|' -f4
 				cat "$msg"
 				echo
-				TARGET=$(echo $msg | sed 's/| N |/|   |/')
-				mv "$msg" "$TARGET" 
-				break
+				TARGET=$(echo $msg | sed 's/|N|/| |/')
+                mv "$msg" "$TARGET" 2>/dev/null
+                break
 			fi
         done
 		cd ..;cd ..;cd ..;cd ..
@@ -94,8 +96,8 @@ function unread1 {
         for msg in *; do
 			COUNTER=$[$COUNTER + 1]
 			if [ $COUNTER = $1 ];then
-				TARGET=$(echo $msg | sed 's/| |/| N |/')
-				mv "$msg" "$TARGET" 
+				TARGET=$(echo $msg | sed 's/| |/|N|/')
+				mv "$msg" "$TARGET" 2>/dev/null
 				break
 			fi
         done
