@@ -13,7 +13,7 @@ function login {
 	if [ -d ./simplemail/users/$1 ]; then
   	    if [ "$2" = "$(cat ./simplemail/users/$1/pass.txt)" ] ; then
             LOGIN=$1
-			echo $LOGIN
+			echo Welcome, $LOGIN!
 		else
 			echo "Error: Password incorrect" 
 		fi
@@ -94,7 +94,7 @@ function unread1 {
         for msg in *; do
 			COUNTER=$[$COUNTER + 1]
 			if [ $COUNTER = $1 ];then
-				TARGET=$(echo $msg | sed 's/"|   |"/"| N |"/')
+				TARGET=$(echo $msg | sed 's/| |/| N |/')
 				mv "$msg" "$TARGET" 
 				break
 			fi
@@ -105,6 +105,24 @@ function unread1 {
     fi
 
 }
+function delete {
+     if [ ! "$LOGIN" = " " ]; then
+		COUNTER=0
+        cd ./simplemail/users/$LOGIN/msg/
+        for msg in *; do
+			COUNTER=$[$COUNTER + 1]
+            if [ $COUNTER = $1 ];then
+                rm "$msg" 
+				break
+            fi
+		done
+           cd ..;cd ..;cd ..;cd ..
+       else
+           echo "Please log into your account"
+       fi
+   
+   }  
+
 
 if [ ! -d ./simplemail ]; then
     mkdir ./simplemail
@@ -138,5 +156,7 @@ while [ true ]; do
 			read1 ${COMM[1]}
 		elif [ ${COMM[0]} = "unread" ]; then
 			unread1 ${COMM[1]}
+		elif [ ${COMM[0]} = "delete" ]; then
+			delete ${COMM[1]}
 		fi
 done
