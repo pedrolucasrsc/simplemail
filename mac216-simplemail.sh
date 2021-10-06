@@ -52,11 +52,11 @@ function msg {
 
 function list {
     if [ ! "$LOGIN" = " " ]; then
-        CONTADOR=0
+        COUNTER=0
         cd ./simplemail/users/$LOGIN/msg/
         for msg in *; do
-            CONTADOR=$[$CONTADOR + 1]
-            echo " $CONTADOR $msg"
+            COUNTER=$[$COUNTER + 1]
+            echo " $COUNTER $msg"
         done
 		cd ..;cd ..;cd ..;cd ..
     else
@@ -66,17 +66,35 @@ function list {
 
 function read1 {
 	if [ ! "$LOGIN" = " " ]; then
-        CONTADOR=0
+        COUNTER=0
         cd ./simplemail/users/$LOGIN/msg/
         for msg in *; do
-			CONTADOR=$[$CONTADOR + 1]
-			if [ $CONTADOR = $1 ];then
+			COUNTER=$[$COUNTER + 1]
+			if [ $COUNTER = $1 ];then
 				echo -n From: 
 				echo "$msg" | cut -d'|' -f4
 				cat "$msg"
 				echo
 				TARGET=$(echo $msg | sed 's/| N |/|   |/')
-				echo "$TARGET"
+				mv "$msg" "$TARGET" 
+				break
+			fi
+        done
+		cd ..;cd ..;cd ..;cd ..
+    else
+        echo "Please log into your account"
+    fi
+
+}
+
+function unread1 {
+	if [ ! "$LOGIN" = " " ]; then
+        COUNTER=0
+        cd ./simplemail/users/$LOGIN/msg/
+        for msg in *; do
+			COUNTER=$[$COUNTER + 1]
+			if [ $COUNTER = $1 ];then
+				TARGET=$(echo $msg | sed 's/"|   |"/"| N |"/')
 				mv "$msg" "$TARGET" 
 				break
 			fi
@@ -118,5 +136,7 @@ while [ true ]; do
             list
 		elif [ ${COMM[0]} = "read" ]; then
 			read1 ${COMM[1]}
+		elif [ ${COMM[0]} = "unread" ]; then
+			unread1 ${COMM[1]}
 		fi
 done
