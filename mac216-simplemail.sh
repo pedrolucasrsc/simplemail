@@ -41,7 +41,7 @@ function listuser {
 function msg {
 	if [ ! "$LOGIN" = " " ];then
 		if [ -d ./simplemail/users/$1 ];then
-		    echo "What's yout message?'CTRL-D' to stop"
+		    echo "What's your message?'CTRL-D' to stop"
 			cat > ./simplemail/users/$1//msg/"|N| $( date ) | $LOGIN"
 			echo 
 		else
@@ -56,10 +56,14 @@ function list {
     if [ ! "$LOGIN" = " " ]; then
         COUNTER=0
         cd ./simplemail/users/$LOGIN/msg/
-        for msg in *; do
-            COUNTER=$[$COUNTER + 1]
-            echo " $COUNTER $msg"
-        done
+		if [ $(ls | wc -l) = 0 ]; then
+			echo "You don't have any message"
+		else
+			for msg in *; do
+				COUNTER=$[$COUNTER + 1]
+				echo " $COUNTER $msg"
+			done
+		fi
 		cd ..;cd ..;cd ..;cd ..
     else
         echo "Please log into your account"
@@ -70,19 +74,24 @@ function read1 {
 	if [ ! "$LOGIN" = " " ]; then
         COUNTER=0
         cd ./simplemail/users/$LOGIN/msg/
-        for msg in *; do
-			COUNTER=$[$COUNTER + 1]
-			if [ $COUNTER = $1 ];then
-				echo -n From: 
-				echo "$msg" | cut -d'|' -f4
-				cat "$msg"
-				echo
-				TARGET=$(echo $msg | sed 's/|N|/| |/')
-                mv "$msg" "$TARGET" 2>/dev/null
-                break
-			fi
-        done
+        if [ $(ls | wc -l) = 0 ]; then
+			echo "You don't have any message"
+		else 
+			for msg in *; do
+				COUNTER=$[$COUNTER + 1]
+				if [ $COUNTER = $1 ];then
+					echo -n From: 
+					echo "$msg" | cut -d'|' -f4
+					cat "$msg"
+					echo
+					TARGET=$(echo $msg | sed 's/|N|/| |/')
+					mv "$msg" "$TARGET" 2>/dev/null
+					break
+				fi
+			done
+		fi
 		cd ..;cd ..;cd ..;cd ..
+		
     else
         echo "Please log into your account"
     fi
