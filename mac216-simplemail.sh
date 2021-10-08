@@ -1,5 +1,6 @@
 #!/bin/bash
-
+## JOÃO GUILHERME ALVES SANTOS NUSP:11819560
+## PEDRO LUCAS RESENDE SIQUEIRA CAMPOS NUSP: 12674130
 function createuser {
 	if [ -d ./simplemail/users/$1 ]; then
 		echo "Error: This user already exists"
